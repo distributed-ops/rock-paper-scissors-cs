@@ -17,7 +17,9 @@ jobs:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Install dependencies
         run: dotnet restore
+      - name: Install tools
+        run: dotnet tool install --global coverlet.console
       - name: Build
         run: dotnet build --configuration Release --no-restore
       - name: Test
-        run: dotnet test --no-restore --verbosity normal
+        run: dotnet test /p:CollectCoverage=true /p:Threshold=80 /p:ThresholdType=method /p:CoverletOutputFormat=lcov /p:CoverletOutput=./lcov ./RockPaperScissors.Tests
